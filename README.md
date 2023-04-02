@@ -9,6 +9,7 @@ A template file and folder structure for a data analysis project/paper done with
 
 2023-02-16 First release with Data and Code folders with materials for data cleaning and initial exploration.
 2023-03-29 Updated all the READMEs and added histograms for the penguin data.
+2023-03-31 Updated all the READMEs and added data analysis results in the Results Folder. 
 
 # Acknowledgement
 

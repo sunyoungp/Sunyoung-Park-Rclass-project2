@@ -6,10 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Marguerite Butler">
-<meta name="dcterms.date" content="2023-03-21">
+<meta name="author" content="Sunyoung Park">
+<meta name="dcterms.date" content="2023-03-31">
 
-<title>An example draft analysis script</title>
+<title>Analysis script</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -110,7 +110,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">An example draft analysis script</h1>
+<h1 class="title">Analysis script</h1>
 </div>
 
 
@@ -120,14 +120,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>Marguerite Butler </p>
+             <p>Sunyoung Park </p>
           </div>
   </div>
     
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">March 21, 2023</p>
+      <p class="date">March 31, 2023</p>
     </div>
   </div>
   
@@ -137,41 +137,43 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<p>This Quarto file loads the cleaned Palmer Penguins data and does some initial analysis. I find this step very helpful for seeing what results you have to work with for your talk or paper/final report.</p>
-<p>Some of what is written below is for you. I would like you to modify this quarto file to produce a document customized for your analysis and written to explain your thinking in your data analysis so feel free to modify as much as you wish.</p>
-<p>It is worth taking a minute to reflect on where we are in the data analysis workflow. The purpose of the previous processing document was to document data cleaning and processing in preparation for analysis. You saw that as part of the cleaning and processing step, we already had to explore the data somewhat to understand how to clean it. In general, as you explore, you find more things that need cleaning. As you clean, you find more to explore.</p>
-<section id="the-need-to-document-your-workflow" class="level1">
-<h1>The need to document your workflow</h1>
-<p>Although we broke our workflow in this project into cleaning and analysis steps, depending on your project, it may be more logical to divide the scripts in other ways. The organization should naturally reflect the workflow.</p>
-<p>In rather clean datasets at times it might make more sense to combine the cleaning and exploring code parts into a single R or Quarto file. <em>But if you do have real errors to fix, you will want to carefully document cleaning steps</em>, and probably not redo the cleaning each time you want to get a bit further on your data exploration and analysis. Itʻs a lot of baggage to carry around and also errors might creep in if you are keeping code in your script that you are not actively working on.</p>
-<p>When there are natural breaks in the workflow (i.e., when you close the door on cleaning or on a first analysis), it can be a good idea to have start a new script because once you clean your data, you will have a new starting point for all of your downstream analyses (and not look back at the really raw data, unless you want to change your mind about some of the cleaning - thus the need for keeping an original raw data file and documenting all the steps).</p>
-<p>This can also come up when you have a multi-stage analysis. In very complex analyses, it can make a lot of sense to have separate scripts for major analyses or workflow steps. As always, use your jugement, and be intentional about your organization. Clean organization = clear thinking.</p>
-</section>
+<p>This Quarto file loads the cleaned Palmer Penguins data and does some initial analysis.</p>
 <section id="analysis" class="level1">
 <h1>Analysis</h1>
-<p>If you did a good job in the previous step, you should have a pretty good idea of the structure of the data.</p>
-<p>For this part of the project, develop three questions and use your R skills to answer them. Begin by producing a summary table of the data that could be included in a future paper. You should produce plots or tables and/or statistics or model fits to address your questions.</p>
+<p>In this analysis script, I am analyzing and answering four questions based on the Palmer Penguins dataset. The four questions include:</p>
+<ul>
+<li>Do species differ in culmen length?</li>
+<li>Does sex have an effect on culmen length?</li>
+<li>Does Island have an effect on culmen length?</li>
+<li>Do size and species have an effect on culmen length?</li>
+</ul>
 </section>
 <section id="setup" class="level1">
 <h1>Setup</h1>
-<p>This needs to run to load the R script so we can include the code chunks below.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">read_chunk</span>(<span class="st">'statistical_analysis.R'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Load needed packages and filepaths.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#load needed packages. make sure they are installed.</span></span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load needed packages. make sure they are installed.</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(ggplot2) <span class="co">#for plotting</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(magrittr) <span class="co">#for piping</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(knitr) <span class="co">#for formatting output</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#path to data and results </span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>data_path <span class="ot">&lt;-</span> <span class="st">"../../Data/Processed_data/"</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>results_path <span class="ot">&lt;-</span> <span class="st">"../../Results/"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(lattice) <span class="co"># for plotting</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(magrittr) <span class="co">#for piping</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(knitr) <span class="co">#for formatting output</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># path to data and results </span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>data_path <span class="ot">&lt;-</span> <span class="st">"../../Data/Processed_data/"</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>results_path <span class="ot">&lt;-</span> <span class="st">"../../Results/"</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>results_pathQ1 <span class="ot">&lt;-</span> <span class="st">"../../Results/Q1/"</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>results_pathQ2 <span class="ot">&lt;-</span> <span class="st">"../../Results/Q2/"</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>results_pathQ3 <span class="ot">&lt;-</span> <span class="st">"../../Results/Q3/"</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>results_pathQ4 <span class="ot">&lt;-</span> <span class="st">"../../Results/Q4/"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Load custom functions.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># function to paste path to output filenames</span></span>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># function to paste path to output filenames.</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>addpath <span class="ot">&lt;-</span> <span class="cf">function</span>( filename, <span class="at">path=</span>data_path ) {</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    location <span class="ot">&lt;-</span> <span class="fu">paste</span>( path, filename, <span class="at">sep=</span><span class="st">""</span>)</span>
@@ -181,43 +183,43 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Load the data.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load data. </span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">readRDS</span>( <span class="fu">addpath</span>(<span class="st">"penguins.rds"</span>, data_path) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">readRDS</span>( <span class="fu">addpath</span>(<span class="st">"processeddata.rds"</span>, data_path) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="create-a-summary-table" class="level1">
-<h1>Create a summary table</h1>
-<p>In any paper you should always report a summary of the data. This includes basic statsistics for your data including sample size, counts, and means and standard errors for continuous data.</p>
-<p>Here we will use skimr which produces a summary table, but with more than we want. Letʻs save it as an object so we can grab the elements we want.</p>
+<section id="summary-table" class="level1">
+<h1>Summary table</h1>
+<p>Summary table consists of basic statistics for the data, including sample size, counts, and means and standard errors for continuous data.</p>
+<p>Here we will use <code>skimr</code> which produces a summary table, but with more than we want. Letʻs save it as an object so we can grab the elements we want.</p>
 <p>It turns out that the <code>skim()</code> function returns a tibble. We can coerce it to a dataframe and use <code>head()</code> to see what the column names are and what the data look like.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create summary table of the data using skimr to use in paper</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># variables, sample size, mean, standard error</span></span>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create summary table of the data using skimr to use in paper.</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># includes variables, sample size, mean, standard error.</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>sk <span class="ot">&lt;-</span> skimr<span class="sc">::</span><span class="fu">skim</span>(dat)  <span class="co"># save skim object</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>sk <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(sk) <span class="co"># save as data.frame</span></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sk)  <span class="co"># see the variable names</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  skim_type     skim_variable n_missing complete_rate character.min
-1 character     Individual ID         0     1.0000000             4
-2 character Clutch Completion         0     1.0000000             2
-3 character          Date Egg         0     1.0000000            10
-4    factor           Species         0     1.0000000            NA
-5    factor            Island         0     1.0000000            NA
-6    factor               Sex         9     0.9734513            NA
+1 character            region         0     1.0000000             6
+2 character             stage         0     1.0000000            18
+3 character clutch_completion         0     1.0000000             2
+4 character               egg         0     1.0000000            10
+5 character           comment       287     0.1533923            25
+6    factor           species         0     1.0000000            NA
   character.max character.empty character.n_unique character.whitespace
-1             6               0                190                    0
-2             3               0                  2                    0
-3            10               0                 50                    0
-4            NA              NA                 NA                   NA
-5            NA              NA                 NA                   NA
+1             6               0                  1                    0
+2            18               0                  1                    0
+3             3               0                  2                    0
+4            10               0                 50                    0
+5            68               0                  8                    0
 6            NA              NA                 NA                   NA
   factor.ordered factor.n_unique           factor.top_counts numeric.mean
 1             NA              NA                        &lt;NA&gt;           NA
 2             NA              NA                        &lt;NA&gt;           NA
 3             NA              NA                        &lt;NA&gt;           NA
-4          FALSE               3 Ade: 151, Gen: 120, Chi: 68           NA
-5          FALSE               3 Bis: 164, Dre: 124, Tor: 51           NA
-6          FALSE               2          MAL: 168, FEM: 162           NA
+4             NA              NA                        &lt;NA&gt;           NA
+5             NA              NA                        &lt;NA&gt;           NA
+6          FALSE               3 Ade: 151, Gen: 120, Chi: 68           NA
   numeric.sd numeric.p0 numeric.p25 numeric.p50 numeric.p75 numeric.p100
 1         NA         NA          NA          NA          NA           NA
 2         NA         NA          NA          NA          NA           NA
@@ -238,8 +240,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <section id="select-columns-for-a-final-summary-table" class="level2">
 <h2 class="anchored" data-anchor-id="select-columns-for-a-final-summary-table">Select columns for a final summary table</h2>
-<p>Letʻs retain only the variable, N, mean, sd, and category counts, but letʻs rename them. Since we will use the SD to compute the stadard error letʻs just rename it as SE now and save a step later. (Remember the standard error is just the standard deviation/ square root(sample size)).</p>
-<p>Note: The <code>results="asis"</code> is an option for <code>knitr</code> to layout the the results without the code formatting. Normally output from code chunks has the look of R output. <code>"asis"</code> (as in “as is”, lol) removes that behavior, so we can lay it out as a typeset table for print.</p>
+<p>Letʻs retain only the variable, N, mean, sd, and category counts, but letʻs rename them. Since we will use the SD to compute the standard error, letʻs just rename it as SE now and save a step later. (Remember the standard error is just the standard deviation/ square root(sample size)).</p>
+<p>Note: The <code>results="asis"</code> is an option for <code>knitr</code> to layout the the results without the code formatting. Normally output from code chunks has the look of R output. <code>"asis"</code> removes that behavior, so we can lay it out as a typeset table for print.</p>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># select only the variable, N, mean, sd, and category counts</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>sk.table <span class="ot">&lt;-</span> sk[<span class="fu">c</span>(<span class="st">"skim_variable"</span>, <span class="st">"N"</span>, <span class="st">"numeric.mean"</span>, <span class="st">"numeric.sd"</span>, <span class="st">"factor.top_counts"</span>)]</span>
@@ -261,84 +263,98 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">Individual ID</td>
+<td style="text-align: left;">region</td>
 <td style="text-align: right;">339</td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Clutch Completion</td>
+<td style="text-align: left;">stage</td>
 <td style="text-align: right;">339</td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Date Egg</td>
+<td style="text-align: left;">clutch_completion</td>
 <td style="text-align: right;">339</td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Species</td>
+<td style="text-align: left;">egg</td>
+<td style="text-align: right;">339</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">comment</td>
+<td style="text-align: right;">52</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">species</td>
 <td style="text-align: right;">339</td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td style="text-align: left;">Ade: 151, Gen: 120, Chi: 68</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Island</td>
+<td style="text-align: left;">island</td>
 <td style="text-align: right;">339</td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td style="text-align: left;">Bis: 164, Dre: 124, Tor: 51</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Sex</td>
+<td style="text-align: left;">sex</td>
 <td style="text-align: right;">330</td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td style="text-align: left;">MAL: 168, FEM: 162</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Culmen Length (mm)</td>
+<td style="text-align: left;">culmen_length</td>
 <td style="text-align: right;">339</td>
 <td style="text-align: right;">43.90</td>
 <td style="text-align: right;">0.30</td>
 <td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Culmen Depth (mm)</td>
+<td style="text-align: left;">culmen_depth</td>
 <td style="text-align: right;">339</td>
 <td style="text-align: right;">17.17</td>
 <td style="text-align: right;">0.11</td>
 <td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Flipper Length (mm)</td>
+<td style="text-align: left;">flipper_length</td>
 <td style="text-align: right;">339</td>
 <td style="text-align: right;">200.79</td>
 <td style="text-align: right;">0.76</td>
 <td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Body Mass (g)</td>
+<td style="text-align: left;">body_mass</td>
 <td style="text-align: right;">339</td>
 <td style="text-align: right;">4196.17</td>
 <td style="text-align: right;">43.62</td>
 <td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Delta 15 N (o/oo)</td>
+<td style="text-align: left;">delta15n</td>
 <td style="text-align: right;">327</td>
 <td style="text-align: right;">8.74</td>
 <td style="text-align: right;">0.03</td>
 <td style="text-align: left;"></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Delta 13 C (o/oo)</td>
+<td style="text-align: left;">delta13c</td>
 <td style="text-align: right;">328</td>
 <td style="text-align: right;">-25.68</td>
 <td style="text-align: right;">0.04</td>
@@ -351,115 +367,246 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(sk.table, <span class="at">file =</span> <span class="fu">addpath</span>(<span class="st">"summary_table.rds"</span>, results_path))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 </section>
-<section id="do-species-differ-in-size" class="level1">
-<h1>Do species differ in size?</h1>
-<p>As an example, letʻs ask the question <em>Do species differ in size?</em> Our first try is a boxplot of mass by species:</p>
+<section id="results-of-the-data-analysis" class="level1">
+<h1>Results of the data analysis</h1>
+<p>The results were created by the <code>statistical_analysis.R</code> script and to the <code>Results</code> folder. There are four subfolders in the <code>Results</code> folder named Q1, Q2, Q3 and Q4, which correspond to the four questions that will follow below, respectively.</p>
+</section>
+<section id="do-species-differ-in-culmen-length" class="level1">
+<h1>1. Do species differ in culmen length?</h1>
+<p>First, we begin by plotting a boxplot of culmen length by species:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot to screen</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">with</span>(dat, <span class="fu">plot</span>(<span class="st">`</span><span class="at">Body Mass (g)</span><span class="st">`</span> <span class="sc">~</span> Species))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">with</span>(dat, <span class="fu">plot</span>(culmen_length <span class="sc">~</span> species, <span class="at">xlab=</span><span class="st">"Species"</span>, <span class="at">ylab=</span><span class="st">"Culmen Length (mm)"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="exploratory_analysis_files/figure-html/mass_species_boxplot-1.png" class="img-fluid" width="672"></p>
+<p><img src="exploratory_analysis_files/figure-html/culmenL_species_boxplot-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot to .png file, can also do pdf using `pdf()` function </span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="at">filename =</span> <span class="fu">addpath</span>(<span class="st">"mass_species_bars.png"</span>, results_path))</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">with</span>(dat, <span class="fu">plot</span>(<span class="st">`</span><span class="at">Body Mass (g)</span><span class="st">`</span> <span class="sc">~</span> Species))</span>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot to .png file</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="at">filename =</span> <span class="fu">addpath</span>(<span class="st">"culmenL_species_bars.png"</span>, results_pathQ1))</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">with</span>(dat, <span class="fu">plot</span>(culmen_length <span class="sc">~</span> species, <span class="at">xlab=</span><span class="st">"Species"</span>, <span class="at">ylab=</span><span class="st">"Culmen Length (mm)"</span>))</span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>quartz_off_screen 
                 2 </code></pre>
 </div>
 </div>
-<p>The results were created by the <code>statistical_analysis.R</code> script and to the <code>Results</code> folder. Depending on how many tables/figures and workflow steps you have, it might make sense to have subfoldersf. Just choose a setup that makes sense for your project and works for you, and provide enough documentation that someone can understand what you are doing.</p>
+<p>The boxplot shows that individuals of Adelie species have the shortest culmen length, while Chinstrap has the longest, followed by Gentoo which is slightly shorter than Chinstrap.</p>
 <p>Now letʻs try a density plot</p>
 <div class="cell">
-
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create plot and send to screen</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> dat <span class="sc">%&gt;%</span>    <span class="co"># culmen length density by species</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ggplot</span>( <span class="fu">aes</span>(<span class="at">x=</span>culmen_length)) <span class="sc">+</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>       <span class="fu">geom_density</span>( <span class="fu">aes</span>(<span class="at">fill=</span>species), <span class="at">alpha=</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">xlab</span>(<span class="st">"Culmen Length (mm)"</span>) <span class="sc">+</span> </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Density"</span>) </span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="exploratory_analysis_files/figure-html/culmenL_species_density-1.png" class="img-fluid" width="672"></p>
 </div>
-<p>Provide a brief diescription of your results. To test the statistical significance of this result we can use ANOVA. We see that species do differ in size and this is a very robust statistical result.</p>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># save ggplot objects using `ggsave()` </span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="fu">addpath</span>(<span class="st">"culmenL_species_density.png"</span>, results_pathQ1), <span class="at">plot=</span>p) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Saving 7 x 5 in image</code></pre>
+</div>
+</div>
+<p>The density plot also demonstrates similar results the boxplot above; Adelie has the highest density in the shortest culmen length, and Chinstrap shows the highest density in the longest culmen length.</p>
+<p>To test the statistical significance of this result, we can use ANOVA.</p>
+<p>We see that species do differ in culmen length and this is a very robust statistical result; p-value is &lt;0.001, with a f-value of &gt;400.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit linear model using mass as outcome, species as predictor</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>lm.fit.s <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="st">`</span><span class="at">Body Mass (g)</span><span class="st">`</span> <span class="sc">~</span> Species, dat)  </span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>anova.table.s <span class="ot">&lt;-</span> <span class="fu">anova</span>(lm.fit.s)</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co"># print to screen the anova table</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(anova.table.s)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit linear model using culmen length as outcome, species as predictor</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>lm.fit.s <span class="ot">&lt;-</span> <span class="fu">lm</span>(culmen_length <span class="sc">~</span> species, dat)  </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>anova.table.s <span class="ot">&lt;-</span> <span class="fu">anova</span>(lm.fit.s)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># print to screen the anova table</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(anova.table.s)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Analysis of Variance Table
 
-Response: Body Mass (g)
-           Df    Sum Sq  Mean Sq F value    Pr(&gt;F)    
-Species     2 145838050 72919025  339.27 &lt; 2.2e-16 ***
-Residuals 336  72215714   214928                      
+Response: culmen_length
+           Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+species     2 7172.2  3586.1  409.41 &lt; 2.2e-16 ***
+Residuals 336 2943.1     8.8                      
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># save anova table to file in Results folder  </span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(anova.table.s, <span class="at">file =</span> <span class="fu">addpath</span>(<span class="st">"mass_species_anova.rds"</span>, results_path))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># save anova table to file in Results folder  </span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(anova.table.s, <span class="at">file =</span> <span class="fu">addpath</span>(<span class="st">"culmenL_species_anova.rds"</span>, results_pathQ1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="does-the-island-have-an-affect-on-size" class="level1">
-<h1>Does the island have an affect on size?</h1>
-<p>What about an island effect? Since we know that species differ, we can include a two-way ANOVA and test both factors.</p>
-<p>When we add island to the model <em>after</em> we account for species, it is not significant.</p>
+<section id="does-sex-have-an-effect-on-culmen-length" class="level1">
+<h1>2. Does sex have an effect on culmen length?</h1>
+<p>What about differences in culmen length affected by sex? Since we know that species differ, we can include a two-way ANOVA and test both factors.</p>
+<p>When we add sex to the model <em>after</em> we account for species, both species and sex are statistically significant, where species is showing a higher variation and more significance.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit linear model using mass as outcome, species and island as predictors</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>lm.fit.si <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="st">`</span><span class="at">Body Mass (g)</span><span class="st">`</span> <span class="sc">~</span> Species <span class="sc">+</span> Island, dat)  </span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>anova.table.si <span class="ot">&lt;-</span> <span class="fu">anova</span>(lm.fit.si)</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(anova.table.si)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Analysis of Variance Table
-
-Response: Body Mass (g)
-           Df    Sum Sq  Mean Sq  F value Pr(&gt;F)    
-Species     2 145838050 72919025 337.3166 &lt;2e-16 ***
-Island      2     13655     6827   0.0316 0.9689    
-Residuals 334  72202060   216174                    
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(anova.table.si, <span class="at">file =</span> <span class="fu">addpath</span>(<span class="st">"mass_species_island_anova.rds"</span>, results_path))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>However, if we add island <em>first, before</em> species, it is signficant! We interpret this as islands differing in mass as well, but islands are not as different as species are in mass.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit linear model again, but fit island first then species as predictors</span></span>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit linear model using culmen length as outcome, species and sex as predictors</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>lm.fit.is <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="st">`</span><span class="at">Body Mass (g)</span><span class="st">`</span> <span class="sc">~</span> Island <span class="sc">+</span> Species, dat)  </span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>anova.table.is <span class="ot">&lt;-</span> <span class="fu">anova</span>(lm.fit.is)</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(anova.table.si)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>lm.fit.sx <span class="ot">&lt;-</span> <span class="fu">lm</span>(culmen_length <span class="sc">~</span> species <span class="sc">+</span> sex, dat)  </span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>anova.table.sx <span class="ot">&lt;-</span> <span class="fu">anova</span>(lm.fit.sx)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(anova.table.sx)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Analysis of Variance Table
 
-Response: Body Mass (g)
-           Df    Sum Sq  Mean Sq  F value Pr(&gt;F)    
-Species     2 145838050 72919025 337.3166 &lt;2e-16 ***
-Island      2     13655     6827   0.0316 0.9689    
-Residuals 334  72202060   216174                    
+Response: culmen_length
+           Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+species     2 6994.8  3497.4  651.73 &lt; 2.2e-16 ***
+sex         1 1137.0  1137.0  211.88 &lt; 2.2e-16 ***
+Residuals 326 1749.4     5.4                      
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(anova.table.si, <span class="at">file =</span> <span class="fu">addpath</span>(<span class="st">"mass_island_species_anova.rds"</span>, results_path))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(anova.table.sx, <span class="at">file =</span> <span class="fu">addpath</span>(<span class="st">"culmenL_species_sex_anova.rds"</span>, results_pathQ2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If we add sex <em>first, before</em> species, it is still significant. We interpret this as sex differing in culmen length.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit linear model again, but fit sex first then species as predictors</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>lm.fit.xs <span class="ot">&lt;-</span> <span class="fu">lm</span>(culmen_length <span class="sc">~</span> sex <span class="sc">+</span> species, dat)  </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>anova.table.xs <span class="ot">&lt;-</span> <span class="fu">anova</span>(lm.fit.xs)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(anova.table.xs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Response: culmen_length
+           Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+sex         1 1218.4  1218.4  227.05 &lt; 2.2e-16 ***
+species     2 6913.4  3456.7  644.15 &lt; 2.2e-16 ***
+Residuals 326 1749.4     5.4                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(anova.table.xs, <span class="at">file =</span> <span class="fu">addpath</span>(<span class="st">"culmenL_sex_species_anova.rds"</span>, results_pathQ2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Letʻs plot both factors together to see whatʻs going on.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create plot, subseted by species and faceted by island</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>q <span class="ot">&lt;-</span> dat <span class="sc">%&gt;%</span>    <span class="co"># mass density by species</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ggplot</span>( <span class="fu">aes</span>(<span class="at">x=</span><span class="st">`</span><span class="at">Body Mass (g)</span><span class="st">`</span>)) <span class="sc">+</span> </span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>       <span class="fu">geom_density</span>( <span class="fu">aes</span>(<span class="at">fill=</span><span class="fu">c</span>(Species)), <span class="at">alpha=</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>       <span class="fu">facet_grid</span>(Island <span class="sc">~</span> .)</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>q</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create plot, subseted by species and faceted by sex</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>q <span class="ot">&lt;-</span> dat <span class="sc">%&gt;%</span>    <span class="co"># culmen lenth density by species</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ggplot</span>( <span class="fu">aes</span>(<span class="at">x=</span>culmen_length)) <span class="sc">+</span> </span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>       <span class="fu">geom_density</span>( <span class="fu">aes</span>(<span class="at">fill=</span><span class="fu">c</span>(species)), <span class="at">alpha=</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>       <span class="fu">facet_grid</span>(sex <span class="sc">~</span> .) <span class="sc">+</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>       <span class="fu">xlab</span>(<span class="st">"Culmen Length (mm)"</span>) <span class="sc">+</span> </span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Density"</span>) </span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>q</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="exploratory_analysis_files/figure-html/mass_species_island_density-1.png" class="img-fluid" width="672"></p>
+<p><img src="exploratory_analysis_files/figure-html/culmenL_species_sex_density-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="fu">addpath</span>(<span class="st">"mass_species_island_density.png"</span>, results_path), <span class="at">plot=</span>q) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="fu">addpath</span>(<span class="st">"culmenL_species_sex_density.png"</span>, results_pathQ2), <span class="at">plot=</span>q) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Saving 7 x 5 in image</code></pre>
+</div>
+</div>
+<p>Males for all three species seem to have longer culmen lengths compared to females. Within each plot, the density between the three species are quite different with Adelie having the shortest culmen length and being the least overlapping with the other two species.</p>
+<p>Two-way ANOVA tests show that these above results are statistically significant; sex has an effect on culmen length.</p>
+</section>
+<section id="does-island-have-an-effect-on-culmen-length" class="level1">
+<h1>3. Does Island have an effect on culmen length?</h1>
+<p>What about differences in culmen length affected by island? Since we know that species differ, we can include a two-way ANOVA and test both factors, similar to Q2 above.</p>
+<p>When we add island to the model <em>after</em> we account for species, it is not significant (p-value &gt;0.05).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit linear model using culmen length as outcome, species and island as predictors</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>lm.fit.si <span class="ot">&lt;-</span> <span class="fu">lm</span>(culmen_length <span class="sc">~</span> species <span class="sc">+</span> island, dat)  </span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>anova.table.si <span class="ot">&lt;-</span> <span class="fu">anova</span>(lm.fit.si)</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(anova.table.si)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Response: culmen_length
+           Df Sum Sq Mean Sq  F value Pr(&gt;F)    
+species     2 7172.2  3586.1 408.0054 &lt;2e-16 ***
+island      2    7.5     3.7   0.4255 0.6538    
+Residuals 334 2935.7     8.8                    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(anova.table.si, <span class="at">file =</span> <span class="fu">addpath</span>(<span class="st">"culmenL_species_island_anova.rds"</span>, results_pathQ3))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If we add island <em>first, before</em> species, it is significant (p-value &lt;0.05). We interpret this as island differing in culmen length.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit linear model using culmen length as outcome again, but fit island first then species as predictors</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>lm.fit.is <span class="ot">&lt;-</span> <span class="fu">lm</span>(culmen_length <span class="sc">~</span> island <span class="sc">+</span> species, dat)  </span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>anova.table.is <span class="ot">&lt;-</span> <span class="fu">anova</span>(lm.fit.is)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(anova.table.is)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Response: culmen_length
+           Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+island      2 1548.3  774.17   88.08 &lt; 2.2e-16 ***
+species     2 5631.4 2815.69  320.35 &lt; 2.2e-16 ***
+Residuals 334 2935.7    8.79                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(anova.table.is, <span class="at">file =</span> <span class="fu">addpath</span>(<span class="st">"culmenL_island_species_anova.rds"</span>, results_pathQ3))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Letʻs plot both factors together to see whatʻs going on.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create plot, subseted by species and faceted by island</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> dat <span class="sc">%&gt;%</span>    <span class="co"># culmen lenth density by species</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ggplot</span>( <span class="fu">aes</span>(<span class="at">x=</span>culmen_length)) <span class="sc">+</span> </span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>       <span class="fu">geom_density</span>( <span class="fu">aes</span>(<span class="at">fill=</span><span class="fu">c</span>(species)), <span class="at">alpha=</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>       <span class="fu">facet_grid</span>(island <span class="sc">~</span> .) <span class="sc">+</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>       <span class="fu">xlab</span>(<span class="st">"Culmen Length (mm)"</span>) <span class="sc">+</span> </span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Density"</span>) </span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>r</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="exploratory_analysis_files/figure-html/culmenL_species_island_density-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="fu">addpath</span>(<span class="st">"culmenL_species_island_density.png"</span>, results_pathQ3), <span class="at">plot=</span>r) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Saving 7 x 5 in image</code></pre>
 </div>
 </div>
 </section>
-<section id="notes" class="level1">
-<h1>Notes</h1>
-<p>For your own explorations, tables and figures can be “quick and dirty”. As long as you can see what’s going on, there is no need to polish them. That’s in contrast to figures you’ll produce for your final products (paper, report, presentation, website, etc.). Those should look as nice, polished and easy to understand as possible.</p>
+<section id="do-size-and-species-have-an-effect-on-culmen-length" class="level1">
+<h1>4. Do size and species have an effect on culmen length?</h1>
+<p>Now we want to know if body mass and species have an effect on culmen length.</p>
+<p>First, we plot both factors.</p>
+<p>From the plot, it appears that body mass and culmen length are positively related in all three species. Chinstrap has longer culmen length with smaller body mass, Gentoo has longer culmen length with higher body mass, and Adelie has shorter culmen length with smaller body mass.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">xyplot</span>(culmen_length <span class="sc">~</span> body_mass, <span class="at">data=</span>dat, <span class="at">groups=</span>species, <span class="at">type=</span><span class="fu">c</span>(<span class="st">"p"</span>,<span class="st">"r"</span>), <span class="at">auto.key=</span><span class="cn">TRUE</span>, <span class="at">xlab=</span><span class="st">"Body Mass (g)"</span>, <span class="at">ylab=</span><span class="st">"Culmen Length (mm)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="exploratory_analysis_files/figure-html/culmenL_mass_species_plot-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="at">filename =</span> <span class="fu">addpath</span>(<span class="st">"culmenL_mass_species_plot.png"</span>, results_pathQ4))</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">with</span>(dat, <span class="fu">xyplot</span>(culmen_length <span class="sc">~</span> body_mass, <span class="at">data=</span>dat, <span class="at">groups=</span>species, <span class="at">type=</span><span class="fu">c</span>(<span class="st">"p"</span>,<span class="st">"r"</span>), <span class="at">auto.key=</span><span class="cn">TRUE</span>, <span class="at">xlab=</span><span class="st">"Body Mass (g)"</span>, <span class="at">ylab=</span><span class="st">"Culmen Length (mm)"</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>quartz_off_screen 
+                2 </code></pre>
+</div>
+</div>
+<p>Now we use ANCOVA model using culmen length (continuous response variable) as outcome, and species (categorical explanatory variable) and body mass (continuous explanatory variable) as predictors. This model is used to assess whether the examined differences in the plot above are statistically significant or could be expected by chance.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit linear model using culmen length as outcome, species and body mass as predictors</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="co"># with interaction</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>lm.fit.cm <span class="ot">&lt;-</span> <span class="fu">lm</span>(culmen_length <span class="sc">~</span> body_mass <span class="sc">*</span> species, <span class="at">data =</span> dat) </span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>anova.table.cm <span class="ot">&lt;-</span> <span class="fu">anova</span>(lm.fit.cm)</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(anova.table.cm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Response: culmen_length
+                   Df Sum Sq Mean Sq  F value Pr(&gt;F)    
+body_mass           1 3568.0  3568.0 620.0236 &lt;2e-16 ***
+species             2 4612.9  2306.5 400.7989 &lt;2e-16 ***
+body_mass:species   2   18.1     9.0   1.5712 0.2093    
+Residuals         333 1916.3     5.8                    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(anova.table.cm, <span class="at">file =</span> <span class="fu">addpath</span>(<span class="st">"culmenL_mass_species_anova.rds"</span>, results_pathQ4))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This model assumes that the two explanatory factors have <em>interaction</em>, meaning whether the covariate, body mass, depends on the categorical predictor, species.</p>
+<p>The p-value for species is &lt;0.05 and therefore, culmen length varies across all three species.</p>
+<p>The p-value for body mass is also &lt;0.05, meaning it is statistically significant that culmen length increases with body mass.</p>
+<p>However, Pr(&gt;F) value for <em>body mass:species</em> is &gt;0.05, and therefore, the statement “the covariate, body mass, depends on the categorical predictor, species” is not statistically significant, which means that the variation observed in the plot would very likely happen “by chance.”</p>
 </section>
 
 </main>

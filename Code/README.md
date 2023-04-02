@@ -18,7 +18,7 @@ Be sure to use **relative paths** so that each script works from the working dir
 
 ## Code Documentation:
 
-## **`processingcode.R` - cleans raw data, outputs clean data**
+## **`Processingcode.R` - cleans raw data, outputs clean data**
 
 **Inputs**
 
@@ -29,9 +29,45 @@ reads in the following files from `../../Data/Raw_data/`
 ```
 
 **Outputs**
+
 ```{r}
 outputs to `../../Data/Processed_data/`
 	`processeddata.rds` - clean data in rds (R) format
 	`processeddata.csv` - clean data in .csv format
 	`orig_names.rds` - short variable names associated with long original variable names in rds format
 ```
+
+## **`Analysis_code.R` - cleans data, outputs exploratory and statistical analysis**
+
+**Inputs**
+
+```{r}
+reads in the following files from `../../Data/Processed_data/`
+	`processeddata.csv` - clean data in .csv format
+	`processeddata.rds` - clean data in rds (R) format
+```
+
+**Outputs**
+```{r}
+outputs to `../../Results/`
+
+`../../Results/Q1/` - results for question #1
+	`culmenL_species_anova.rds` - culmen length by species ANOVA table in .rds (R) format
+	`culmenL_species_bars.png` - culmen length by species in .png format
+         `culmenL_species_density.png` - culmen length density by species plot in .png format
+
+`../../Results/Q2/` - results for question #2
+        `culmenL_sex_species_anova.rds` - culmen length by sex and species ANOVA table in .rds format
+	`culmenL_species_sex_anova.rds` - culmen length by species and sex ANOVA table in .rds format
+         `culmenL_species_sex_density.png` - culmen length density by species and sex plot in .png format
+
+`../../Results/Q3/` - results for question #3
+         `culmenL_island_species_anova.rds` - culmen length by island and species ANOVA table in .rds format
+	`culmenL_species_island_anova.rds` - culmen length by species and island ANOVA table in .rds format
+         `culmenL_species_island_density.png` - culmen length density by species and island plot in .png format
+
+`../../Results/Q4/` - results for question #4
+         `culmenL_mass_species_anova.rds` - culmen length by mass and species ANOVA table in .rds (R) format
+	`culmenL_mass_species_plot.png` - culmen length by mass and species in .png format
+```
+
