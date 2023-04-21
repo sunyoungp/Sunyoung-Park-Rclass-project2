@@ -1,7 +1,7 @@
 ---
-title: "Example Manuscript Template for a Data Analysis Project"
+title: How do different factors affect culmen length of the three species of Palmer Penguins? 
 subtitle: ""
-author: Marguerite Butler
+author: Sunyoung Park
 date: "`r Sys.Date()`"
 format:
   docx:
@@ -39,18 +39,17 @@ _Write a summary of your project._
 _Provide enough background on your topic that others can understand the why and how of your analysis_ 
 
 ## Description of data and data source
-_Describe what the data is, what it contains, where it is from, etc. Eventually this might be part of a methods section._
-
-_To cite other work (usually done in the introduction, methods, and discussion), make sure your references are in the bibtex file specified in the YAML header above (here `references.bib`) and have the right bibtex key. Then you can include like below. Remember that enclosing the reference key in [ ] will make a parenthetical citation:_
 
 Here we describe an analysis of the Palmer Penguins dataset [@Horst:2020], which contains data on three species of penguins from the Palmer Archipelago, Antarctica. Data were collected and made available by Dr. Kristen Gorman and the Palmer Station, Antarctica LTER, a member of the Long Term Ecological Research Network [@Gorman:2014].
 
 ## Questions/Hypotheses to be addressed
-_State the research questions you plan to answer with this analysis. To get you started:_
 
 Our research questions are:
 
-1. Are the species different in size? 
+1. Do species differ in culmen length?
+2. Does sex have an effect on culmen length?
+3. Does Island have an effect on culmen length?
+4. Do size and species have an effect on culmen length?
 
 {{< pagebreak >}}
 
@@ -96,45 +95,38 @@ resulttable=readRDS("../../Results/summary_table.rds")
 knitr::kable(resulttable, digits=2)
 ```
 
-## Size
+## 1. Do species differ in culmen length?
 
-_As an example, here is an analysis of size by species and island.  You may leave this if you wish, but do edit it to make it your own._
+Here is an analysis of culmen length by species. 
 
-We found that Gentoo penguins are substantially larger than both Adelie and Chinstrap penguins, which are similar in size
-(@fig-mass_species_bars, ANOVA P-value < 0.001 ).
+The boxplot shows that individuals of Adelie species have the shortest culmen length, while Chinstrap has the longest, followed by Gentoo which is slightly shorter than Chinstrap.
+(@fig-culmenL_species_bars, ANOVA P-value < 0.001 ).
 
 ```{r}
-#| label: fig-mass_species_bars
-#| fig-cap: "Body mass distributions of the three species of penguin."
+#| label: fig-culmenL_species_bars
+#| fig-cap: "Culmen Length distributions of the three species of penguin."
 #| echo: FALSE
-knitr::include_graphics("../../Results/mass_species_bars.png")
+knitr::include_graphics("../../Results/culmenL_species_bars.png")
 ```
 
 ```{r , results="asis"}
-#| label: tbl-mass_species_anova
-#| tbl-cap: "Size differences between species."
+#| label: tbl-culmenL_species_anova
+#| tbl-cap: "Culmen Length differences between species."
 #| echo: FALSE
 options(knitr.kable.NA = "")
-resulttable=readRDS("../../Results/mass_species_anova.rds")
+resulttable=readRDS("../../Results/culmenL_species_anova.rds")
 knitr::kable(resulttable, digits=2)
 ```
 
-There does not seem to be any intrinsic island effect. Differences in mass across islands are related to the species which happen to reside on each island (@fig-mass_species_island_density, @tbl-mass_species_island_anova).
+To test the statistical significance of this result, we can use ANOVA.
+
+We see that species do differ in culmen length and this is a very robust statistical result; p-value is <0.001, with a f-value of >400. (@fig-culmenL_species_density, @tbl-culmenL_species_anova).
 
 ```{r}
-#| label: fig-mass_species_island_density
-#| fig-cap: "Body mass distributions of the three species of penguin."
+#| label: fig-culmenL_species_density
+#| fig-cap: "Culmen Length distributions of the three species of penguin."
 #| echo: FALSE
-knitr::include_graphics("../../Results/mass_species_island_density.png")
-```
-
-```{r , results="asis"}
-#| label: tbl-mass_species_island_anova
-#| tbl-cap: "Size differences between species by island."
-#| echo: FALSE
-options(knitr.kable.NA = "")
-resulttable=readRDS("../../Results/mass_species_island_anova.rds")
-knitr::kable(resulttable, digits=2)
+knitr::include_graphics("../../Results/culmenL_species_density.png")
 ```
 
 
